@@ -1,0 +1,41 @@
+const user = {
+    id: 1,
+    firstName: "Mohammed",
+    lastName: "Samy",
+    username: "mohammedsanta",
+    joined: "2020"
+}
+
+const userData = {
+    related: 1,
+    email: "mohammedsamy@gmail.com",
+    phone: "01112733081",
+    picture: "link"
+}
+
+const additionalData = {
+    related: 1,
+    address: "10 street mohammed ibrahem",
+    area: "mady",
+    city: "cairo",
+    governorate: "cairo",
+    PostalCode: "442"
+}
+
+const wallet = {
+    related: 1,
+    balance: 69000,
+    currency: 'USD',
+    cardNumber: 616541651651,
+    cardType: 'Visa',
+    expirationData: 2026,
+    secuirtyCode: 6969,
+    billingAddress: "10 mohammed ibrahem"    
+}
+
+const card = {
+    realte: 1,
+    cardNumber: 65651654,
+    expirationDate: 2/25,
+    CVCCode: 123
+}
