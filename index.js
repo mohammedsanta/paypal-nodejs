@@ -4,6 +4,9 @@ const userModel = require('./models/user');
 const bcrypt = require('bcrypt');
 const cardModel = require('./models/card');
 const walletModel = require('./models/wallet');
+const generateAccessToken = require('./helper/generateAccessToken');
+const verifyAccessToken = require('./helper/verifyAccessToken');
+const authenticationToken = require('./helper/authenticationToken');
 const app = express();
 
 const mongooseUrl = "mongodb://127.0.0.1:27017/paypal";
@@ -46,9 +49,21 @@ app.post('/auth/login', async (req,res) => {
 
     const loginTest = await bcrypt.compare(data.password,userPassword);
 
-    if(loginTest) return res.status(200).send(getUser);
+    if(loginTest) {
+    
+        const token = generateAccessToken(getUser)   
 
-    res.status(401).send({ message: "Wrong Credentials" })
+        return res.cookie("token", token , { httpOnly: true }).status(200).send({getUser , genrated : generateAccessToken(getUser) });
+    
+    }
+
+    res.status(401).send({ message: "Wrong Credentials"})
+
+})
+
+app.post('/auth/logout',(req,res) => {
+
+    return res.cookie('token','').send('Logout has done');
 
 })
 
@@ -84,6 +99,33 @@ app.get('/dashboard',(req,res) => {
 app.post('/send',(req,res) => {
 
 
+
+})
+
+app.post('/deposit',authenticationToken, async (req,res) => {
+
+    // the budget or money you want to add
+
+    const budget = req.body.budget;
+
+    console.log(budget)
+
+    const getCookie = req.headers.cookie;
+    const token = getCookie.split('=')[1];
+
+    const user = verifyAccessToken(token)
+
+    const userId = user.data.user[0]._id;
+
+    const getWallet = await walletModel.find({user_id: userId})
+    const wallet = getWallet[0]
+
+    const updateWallet = await walletModel.findOneAndUpdate({user_id: userId,balance : wallet.balance + budget })
+
+    console.log(wallet)
+    console.log(updateWallet)
+
+    return res.send('no error')
 
 })
 
